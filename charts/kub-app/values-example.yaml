@@ -1,0 +1,46 @@
+---
+
+global:
+  container: {}
+cronjob:
+  enabled: false
+daemonset:
+  enabled: false
+ingress:
+  enabled: false
+rbac:
+  enabled: false
+
+job:
+  enabled: false
+
+statefulset:
+  enabled: false
+
+deployment:
+  enabled: false
+
+serviceaccount:
+  enabled: true
+
+canary:
+  v1:
+    configMap: {}
+
+
+configMap:
+  enabled: true
+  annotations:
+    helm.sh/hook: pre-upgrade
+  test_v1.txt: |
+    text_v1
+  test_v2.txt: |
+    text_v2
+
+secret:
+  enabled: true
+  annotations:
+    helm.sh/hook: pre-upgrade
+  stringData:
+    topSecret: "42"
+

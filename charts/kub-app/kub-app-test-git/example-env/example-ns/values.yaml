@@ -1,0 +1,13 @@
+---
+project_name: example-project
+configMap:
+  enabled: true
+  env_for_all_service_in_ns: values42
+  test3: values42
+secret:
+  enabled: true
+  annotations:
+    helm.sh/hook: pre-upgrade
+  stringData:
+    nameSpaceSecret: "zone 51"
+

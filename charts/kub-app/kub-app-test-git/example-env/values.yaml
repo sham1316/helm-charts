@@ -1,0 +1,25 @@
+---
+tolerations: &tolerations
+  - key: "node.kubernetes.io/unreachable"
+    operator: "Exists"
+    effect: "NoExecute"
+    tolerationSeconds: 30
+  - key: "node.kubernetes.io/not-ready"
+    operator: "Exists"
+    effect: "NoExecute"
+    tolerationSeconds: 30
+  - key: "environment"
+    operator: "Equal"
+    value: "example"
+    effect: "NoSchedule"
+
+
+nodeSelector:
+  node-role.kubernetes.io/node: ""
+  project: prod
+
+configMap:
+  enabled: true
+  env_for_all_service_in_ns:
+      values43
+

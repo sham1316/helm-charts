@@ -1,0 +1,64 @@
+---
+# Source: kub-app/templates/ServiceAccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    app.kubernetes.io/version: "01.01.01"
+    helm.sh/chart: kub-app-01.01.01
+  name: app1
+  namespace: testns
+  labels:
+    helm.sh/chart: kub-app-01.01.01
+    app.kubernetes.io/version: "01.01.01"
+    app.kubernetes.io/name: app1
+    app.kubernetes.io/instance: app1
+    app.kubernetes.io/managed-by: Helm
+---
+# Source: kub-app/templates/Secret.yaml
+apiVersion: v1
+kind: Secret
+type: Opaque
+metadata:
+  name: app1
+  namespace: testns
+  labels:
+    helm.sh/chart: kub-app-01.01.01
+    app.kubernetes.io/version: "01.01.01"
+    app.kubernetes.io/name: app1
+    app.kubernetes.io/instance: app1
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    app.kubernetes.io/version: "01.01.01"
+    helm.sh/chart: kub-app-01.01.01    
+    helm.sh/hook: "pre-upgrade"
+stringData:
+  nameSpaceSecret: zone 51
+---
+# Source: kub-app/templates/ConfigMap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  annotations:
+    app.kubernetes.io/version: "01.01.01"
+    helm.sh/chart: kub-app-01.01.01    
+    helm.sh/hook: "pre-upgrade"
+  name: app1-v1
+  namespace: testns
+  labels:
+    helm.sh/chart: kub-app-01.01.01
+    app.kubernetes.io/version: "01.01.01"
+    app.kubernetes.io/name: app1
+    app.kubernetes.io/instance: app1
+    app.kubernetes.io/managed-by: Helm
+    canaryversion: v1
+data:
+  env_for_all_service_in_ns: |
+    values42
+  test3: |
+    values42
+  test_v1.txt: |
+    text_v1
+    
+  test_v2.txt: |
+    text_v2

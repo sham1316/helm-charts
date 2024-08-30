@@ -1,0 +1,14 @@
+# Default values for kub-app.
+---
+app_name: dummy-name
+
+configMap:
+  enabled: true
+
+canary:
+  v1:
+    deployment: {}
+    configMap: {}
+
+serviceaccount:
+  enabled: true

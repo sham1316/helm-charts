@@ -1,0 +1,5 @@
+{{ .Release.Namespace }}/{{ .Release.Name }}.
+
+{{/*  $ helm status {{ .Release.Name }} --namespace {{ .Release.Namespace }}*/}}
+{{/*  $ helm get all {{ .Release.Name }} --namespace {{ .Release.Namespace }}*/}}
+ 
