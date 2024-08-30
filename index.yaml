@@ -1,0 +1,31 @@
+apiVersion: v1
+entries:
+  kub-app:
+  - apiVersion: v2
+    created: "2024-08-30T10:53:34.502754831Z"
+    dependencies:
+    - name: kub-lib
+      repository: file://../kub-lib
+      version: 01.01.01
+    description: A Helm chart for App in Kubernetes
+    digest: 4e63138c4fb963219a74fa102f9a25e347bc53d7c73125a6f8b1eee9a178df98
+    name: kub-app
+    type: application
+    urls:
+    - https://github.com/sham1316/helm-charts/releases/download/kub-app-01.01.01/kub-app-01.01.01.tgz
+    version: 01.01.01
+  kub-lib:
+  - apiVersion: v2
+    created: "2024-08-30T10:53:34.620498981Z"
+    description: Kub application template for deploy to k8s
+    digest: ca6cda76e81eb1eb6ff794f71eef753049ae882626bc9df6f9e89b735567cd57
+    home: https://github.com/sham1316/kub-app
+    maintainers:
+    - email: sham1316@gmail.com
+      name: sham
+    name: kub-lib
+    type: library
+    urls:
+    - https://github.com/sham1316/helm-charts/releases/download/kub-lib-01.01.01/kub-lib-01.01.01.tgz
+    version: 01.01.01
+generated: "2024-08-30T10:53:34.620528627Z"
