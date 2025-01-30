@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}
+  name: {{ include "kub-app.fullname" . }}
   labels:
     {{- include "kub-app.labels" . | nindent 4 }}
     {{- printf "app: %s" .Release.Name | nindent 4 }}
