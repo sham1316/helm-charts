@@ -60,3 +60,13 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{ define "kub-app.env" }}
+{{- if .Values.env -}}
+env:
+{{- range $name, $value := .Values.env }}
+  - name: {{ $name }}
+    value: {{ $value | quote}}
+{{- end }}
+{{- end -}}
+{{ end }}
