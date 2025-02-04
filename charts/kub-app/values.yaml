@@ -5,6 +5,8 @@ image:
   pullPolicy: IfNotPresent
   tag: ""
 
+imageCredentials: []
+
 serviceAccount:
   create: true
   automount: true
@@ -26,13 +28,18 @@ deployments:
 
 monitoring:
   enabled: false
-  port: 8081
+  port: 8082
+  exp: health,info,prometheus,metrics
 
 podAnnotations: {}
 podLabels: {}
 
-env:
-  app: test
+configMap: []
+postgresExternalSecretName: externalSecretName
+env: []
+#
+#env:
+#  APP: TEST
 
 podSecurityContext: {}
 

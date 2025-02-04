@@ -71,3 +71,15 @@ env:
 {{- end }}
 {{- end -}}
 {{ end }}
+
+{{- define "imagePullSecret" }}
+{{- printf "{\"auths\": {\"%s\": {\"auth\": \"%s\"}}}" .Values.imageCredentials.registry (printf "%s:%s" .Values.imageCredentials.username .Values.imageCredentials.password | b64enc) | b64enc }}
+{{- end }}
+
+{{/*
+    dump variables
+    example: {{- template "magda.var_dump" $var }}
+*/}}
+{{- define "magda.var_dump" -}}
+{{- . | mustToPrettyJson | printf "\nThe JSON output of the dumped var is: \n%s" | fail }}
+{{- end -}}

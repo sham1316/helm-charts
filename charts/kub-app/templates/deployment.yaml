@@ -5,7 +5,6 @@ metadata:
   name: {{ include "kub-app.fullname" . }}
   labels:
     {{- include "kub-app.labels" . | nindent 4 }}
-    {{- printf "app: %s" .Release.Name | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
@@ -13,7 +12,6 @@ spec:
   selector:
     matchLabels:
       {{- include "kub-app.selectorLabels" . | nindent 6 }}
-      {{- printf "app: %s" .Release.Name | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -22,7 +20,6 @@ spec:
       {{- end }}
       labels:
         {{- include "kub-app.selectorLabels" . | nindent 8 }}
-        {{- printf "app: %s" .Release.Name | nindent 8 }}
     spec:
       serviceAccountName: {{ include "kub-app.serviceAccountName" . }}
       securityContext:
@@ -33,7 +30,11 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          {{- include "kub-app.env" . | nindent 10 }}
+          env:
+          {{- range  .Values.env -}}
+          {{- $envName := print "kub-app-lib.env." . }}
+          {{- include $envName $ | nindent 12 }}
+          {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
