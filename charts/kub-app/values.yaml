@@ -36,7 +36,17 @@ podLabels: {}
 
 configMap: []
 postgresExternalSecretName: externalSecretName
+externalSecretName: externalSecretName
+hazelcastEnv:
+  - HAZELCAST_CLUSTER_NAME
+  - HAZELCAST_LABEL_NAME
+  - HAZELCAST_LABEL_VALUE
+  - HAZELCAST_NAME
+  - HAZELCAST_NAMESPACE
+  - HAZELCAST_URL
+
 env: []
+secretEnv: []
 #
 #env:
 #  APP: TEST

@@ -31,10 +31,8 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
-          {{- range  .Values.env -}}
-          {{- $envName := print "kub-app-lib.env." . }}
-          {{- include $envName $ | nindent 12 }}
-          {{- end }}
+            {{- include "kub-app-lib.env" $ | nindent 12 }}
+            {{- include "kub-app-lib.env.secrets" $ | nindent 12 }}
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
