@@ -89,3 +89,6 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+rbac:
+  enabled: false

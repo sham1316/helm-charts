@@ -1,0 +1,32 @@
+{{- if .Values.rbac -}}
+{{- if .Values.rbac.enabled -}}
+{{- if .Values.rbac.rules -}}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include "kub-app.fullname" . }}
+  labels:
+    {{- include "kub-app.labels" . | nindent 4 }}
+rules:
+{{- if .Values.rbac.rules }}
+{{ toYaml .Values.rbac.rules }}
+{{ end }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "kub-app.fullname" . }}
+  labels:
+    {{- include "kub-app.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ include "kub-app.fullname" . }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "kub-app.fullname" . }}
+    namespace: {{ .Release.Namespace }}
+{{ end }}
+{{- end -}}
+{{- end -}}
