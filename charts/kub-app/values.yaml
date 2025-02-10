@@ -75,10 +75,12 @@ resources: {}
 
 autoscaling:
   enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
-  targetMemoryUtilizationPercentage: 80
+  minReplicas: 3
+  maxReplicas: 10
+  custombehaviour:
+    enabled: false
+  targetCPUUtilizationPercentage: 65
+  targetMemoryUtilizationPercentage: 75
 
 volumes: []
 

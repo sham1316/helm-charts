@@ -1,0 +1,69 @@
+{{- if .Values.autoscaling }}
+{{- if .Values.autoscaling.enabled }}
+{{- if .Values.deployments.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "kub-app.fullname" $ }}
+  labels:
+    {{- include "kub-app.labels" $ | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "kub-app.fullname" $   }}
+  minReplicas: {{ .Values.autoscaling.minReplicas | default 3 }}
+  maxReplicas: {{ .Values.autoscaling.maxReplicas | default ( mul .Values.autoscaling.minReplicas 3) }}
+  behavior:
+    {{- if .Values.autoscaling.custombehaviour.enabled }}
+      {{- if .Values.autoscaling.custombehaviour.scaleDown }}
+    scaleDown:
+        {{- toYaml .Values.autoscaling.custombehaviour.scaleDown | nindent 6 }}
+      {{- end }}
+      {{- if .Values.autoscaling.custombehaviour.scaleUp }}
+    scaleUp:
+        {{- toYaml .Values.autoscaling.custombehaviour.scaleUp | nindent 6 }}
+      {{- end }}
+    {{- else }}
+    scaleDown:
+      policies:
+      - periodSeconds: 300
+        type: Pods
+        value: 1
+      - periodSeconds: 15
+        type: Percent
+        value: 30
+      stabilizationWindowSeconds: 15
+      selectPolicy: Max
+    scaleUp:
+      policies:
+      - periodSeconds: 15
+        type: Pods
+        value: 4
+      - periodSeconds: 15
+        type: Percent
+        value: 250
+      selectPolicy: Max
+      stabilizationWindowSeconds: 0
+    {{- end }}
+  metrics:
+    {{- if .Values.autoscaling.targetCPUUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.autoscaling.targetCPUUtilizationPercentage }}
+    {{- end }}
+    {{- if .Values.autoscaling.targetMemoryUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.autoscaling.targetMemoryUtilizationPercentage }}
+    {{- end }}
+---
+{{- end }}
+{{- end }}
+{{- end }}
