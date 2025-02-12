@@ -78,4 +78,11 @@
       key: URL
 - name: DB_URL
   value: ${_DB_URL}&ApplicationName={{ include  "kub-app.nameNamespace" . }}
+- name: _URLR2DB
+  valueFrom:
+    secretKeyRef:
+      name: {{ $postgresExternalSecretName }}
+      key: URLR2db
+- name: R2DB_URL
+  value: ${_URLR2DB}&ApplicationName={{ include  "kub-app.nameNamespace" . }}
 {{- end -}}
