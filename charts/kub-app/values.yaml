@@ -30,6 +30,15 @@ monitoring:
   enabled: false
   port: 8082
   exp: health,info,prometheus,metrics
+  serviceMonitor:
+    enabled: false
+    annotations: []
+    interval: 60s
+    scrapeTimeout: 10
+    honorLabels: []
+    relabelings: []
+    metricRelabelings: []
+    additionalEndpoints: []
 
 podAnnotations: {}
 podLabels: {}
@@ -94,3 +103,10 @@ affinity: {}
 
 rbac:
   enabled: false
+
+persistence:
+  enabled: false
+  accessMode: ReadWriteOnce
+  size: 8Gi
+  labels: {}
+  path: /storage

@@ -42,8 +42,12 @@ spec:
               containerPort: {{ .Values.monitoring.port }}
               protocol: TCP
             {{- end }}
-          {{- with .Values.volumeMounts }}
+         {{- if or .Values.volumes .Values.persistence.enabled }}
           volumeMounts:
+            - mountPath: {{ .Values.persistence.path }}
+              name: storage-volume
+         {{- end }}
+          {{- with .Values.volumeMounts }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
           resources:
@@ -72,8 +76,15 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.volumes }}
+      {{- if or .Values.volumes .Values.persistence.enabled }}
       volumes:
+      {{- with .Values.volumes }}
         {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.persistence.enabled }}
+        - name: storage-volume
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.existingClaim | default (include "kub-app.fullname" .) }}
+      {{- end }}
       {{- end }}
   {{- end -}}
