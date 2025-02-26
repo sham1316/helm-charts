@@ -48,12 +48,14 @@ spec:
             {{- end }}
          {{- if or .Values.volumes .Values.persistence.enabled }}
           volumeMounts:
+         {{- if .Values.persistence.enabled }}
             - mountPath: {{ .Values.persistence.path }}
               name: storage-volume
          {{- end }}
           {{- with .Values.volumeMounts }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
+         {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- with .Values.deployments.startupProbe }}
