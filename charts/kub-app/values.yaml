@@ -110,3 +110,6 @@ persistence:
   size: 8Gi
   labels: {}
   path: /storage
+
+strategy:
+  type: RollingUpdate

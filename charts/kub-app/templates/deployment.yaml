@@ -9,6 +9,10 @@ spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
+  {{- if or .Values.strategy }}
+  strategy:
+  {{ toYaml .Values.strategy | indent 4 }}
+  {{- end }}
   selector:
     matchLabels:
       {{- include "kub-app.selectorLabels" . | nindent 6 }}
