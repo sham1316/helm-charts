@@ -30,11 +30,12 @@ monitoring:
   enabled: false
   port: 8082
   exp: health,info,prometheus,metrics
-  serviceMonitor:
+  podMonitor:
+    path: /metrics
     enabled: false
     annotations: []
     interval: 60s
-    scrapeTimeout: 10
+    scrapeTimeout: 10s
     honorLabels: []
     relabelings: []
     metricRelabelings: []
