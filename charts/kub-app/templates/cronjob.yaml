@@ -1,0 +1,44 @@
+{{- if .Values.cronjob.enabled}}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  annotations:
+    checksum/config: {{ print .Values.cronjob.containers  | sha256sum }}
+  name: {{ include "kub-app.fullname" $ }}
+  labels:
+    {{- include "kub-app.labels" $ | nindent 4 }}
+spec:
+  concurrencyPolicy: {{ .Values.cronjob.concurrencyPolicy | default "Forbid" }}
+  successfulJobsHistoryLimit: {{ .Values.cronjob.successfulJobsHistoryLimit | default 1 }}
+  schedule: {{ .Values.cronjob.schedule | quote }}
+  jobTemplate:
+    metadata:
+      labels:
+        {{- include "kub-app.labels" $ | nindent 8 }}
+        app_type: 'Job'
+      annotations:
+        checksum/config: {{ print .Values.cronjob.containers | sha256sum }}
+    spec:
+      {{- if .Values.cronjob.activeDeadlineSeconds }}
+      activeDeadlineSeconds: {{ .Values.cronjob.activeDeadlineSeconds }}
+      {{- end }}
+      ttlSecondsAfterFinished: {{ $.Values.cronjob.ttlSecondsAfterFinished | default 7200  }}
+      template:
+        metadata:
+          labels:
+            {{- include "kub-app.labels" $ | nindent 12 }}
+          annotations:
+            checksum/config: {{ print .Values.cronjob.containers  | sha256sum }}
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          {{- range $name, $container := .Values.cronjob.containers }}
+            - name: {{ $name }}
+              image: {{ $container.image }}
+              command:
+                {{- $container.command | toYaml | nindent 16 }}
+              args:
+                {{- printf "- %s" ($container.args | quote) | nindent 16 }}
+          {{- end }}
+{{- end -}}

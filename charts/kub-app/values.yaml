@@ -114,3 +114,19 @@ persistence:
 
 strategy:
   type: RollingUpdate
+
+
+cronjob:
+  enabled: false
+  concurrencyPolicy: "Forbid"
+  successfulJobsHistoryLimit: 1
+  schedule: "* 1 * * *"
+  containers:
+    curl:
+      image: alpine
+      command: ["/bin/sh", "-c"]
+      args:
+        echo 1; 
+        sleep 2;
+        echo 2
+      volumes: []
