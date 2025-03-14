@@ -92,6 +92,11 @@ autoscaling:
   targetCPUUtilizationPercentage: 65
   targetMemoryUtilizationPercentage: 75
 
+pdb:
+  enabled: false
+  minAvailable: 1
+
+
 volumes: []
 
 volumeMounts: []
