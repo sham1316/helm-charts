@@ -1,0 +1,12 @@
+{{- if and .Values.deployments .Values.deployments.enabled .Values.pdb .Values.pdb.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+{{ template "kub-app.labels" . }}
+spec:
+  {{- if .Values.pdb.minAvailable }}
+  minAvailable: {{ .Values.pdb.minAvailable }}
+  selector:
+    matchLabels:
+      {{- include "kub-app.selectorLabels" $ | nindent 6 }}
+{{- end }}
+{{- end -}}
