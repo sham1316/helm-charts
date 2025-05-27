@@ -1,0 +1,43 @@
+{{- if .Values.ingressSecond.enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "kub-app.fullname" . }}-second
+  labels:
+    {{- include "kub-app.labels" . | nindent 4 }}
+  {{- with .Values.ingressSecond.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- with .Values.ingressSecond.className }}
+  ingressClassName: {{ . }}
+  {{- end }}
+  {{- if .Values.ingressSecond.tls }}
+  tls:
+    {{- range .Values.ingressSecond.tls }}
+    - hosts:
+        {{- range .hosts }}
+        - {{ . | quote }}
+        {{- end }}
+      secretName: {{ .secretName }}
+    {{- end }}
+  {{- end }}
+  rules:
+    {{- range .Values.ingressSecond.hosts }}
+    - host: {{ .host | quote }}
+      http:
+        paths:
+          {{- range .paths }}
+          - path: {{ .path }}
+            {{- with .pathType }}
+            pathType: {{ . }}
+            {{- end }}
+            backend:
+              service:
+                name: {{ include "kub-app.fullname" $ }}
+                port:
+                  number: {{ $.Values.service.port }}
+          {{- end }}
+    {{- end }}
+{{- end }}
