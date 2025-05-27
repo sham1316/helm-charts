@@ -81,6 +81,18 @@ ingress:
           pathType: ImplementationSpecific
   tls: []
 
+ingressSecond:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: chart-example.second
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+
+
 resources: {}
 
 autoscaling:
