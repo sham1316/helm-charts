@@ -3,6 +3,16 @@ entries:
   kub-app:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2025-06-23T12:00:23.518432856Z"
+    description: A Helm chart for Kubernetes
+    digest: 1c2123348794e49dbb881cc0c5cb9cded3dd282904846a92595855e8fc553536
+    name: kub-app
+    type: application
+    urls:
+    - https://github.com/sham1316/helm-charts/releases/download/kub-app-0.2.11/kub-app-0.2.11.tgz
+    version: 0.2.11
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2025-05-27T09:55:44.197315013Z"
     description: A Helm chart for Kubernetes
     digest: 53b05c6f7883e1a0ab00af78999b54b422e767e3a0adb0d996a7ff84aa9dbe56
@@ -121,4 +131,4 @@ entries:
     urls:
     - https://github.com/sham1316/helm-charts/releases/download/kub-app-0.1.0/kub-app-0.1.0.tgz
     version: 0.1.0
-generated: "2025-05-27T09:55:44.197366379Z"
+generated: "2025-06-23T12:00:23.518529047Z"
