@@ -40,5 +40,9 @@ spec:
                 {{- $container.command | toYaml | nindent 16 }}
               args:
                 {{- printf "- %s" ($container.args | quote) | nindent 16 }}
+              env:
+                {{- include "kub-app-lib.env" $ | nindent 16 }}
+                {{- include "kub-app-lib.env.secrets" $ | nindent 16 }}
+
           {{- end }}
 {{- end -}}
