@@ -28,6 +28,10 @@ spec:
       serviceAccountName: {{ include "kub-app.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- if .Values.deployments.initContainers }}
+      initContainers:
+        {{- toYaml .Values.deployments.initContainers | nindent 8 }}
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
