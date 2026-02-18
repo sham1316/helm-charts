@@ -1,48 +1,54 @@
-{{- if .Values.cronjob.enabled}}
+{{- $root := . -}}
+{{- range $cjName, $cj := $root.Values.cronjobs }}
+{{- if $cj.enabled }}
 ---
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  annotations:
-    checksum/config: {{ print .Values.cronjob.containers  | sha256sum }}
-  name: {{ include "kub-app.fullname" $ }}
+  name: {{ include "kub-app.fullname" $root }}-{{ $cjName }}
   labels:
-    {{- include "kub-app.labels" $ | nindent 4 }}
+    {{- include "kub-app.labels" $root | nindent 4 }}
+  annotations:
+    checksum/config: {{ $cj.containers | toJson | sha256sum }}
 spec:
-  concurrencyPolicy: {{ .Values.cronjob.concurrencyPolicy | default "Forbid" }}
-  successfulJobsHistoryLimit: {{ .Values.cronjob.successfulJobsHistoryLimit | default 1 }}
-  schedule: {{ .Values.cronjob.schedule | quote }}
+  schedule: {{ $cj.schedule | quote }}
+  concurrencyPolicy: {{ $cj.concurrencyPolicy | default "Forbid" }}
+  successfulJobsHistoryLimit: {{ $cj.successfulJobsHistoryLimit | default 1 }}
   jobTemplate:
     metadata:
       labels:
-        {{- include "kub-app.labels" $ | nindent 8 }}
-        app_type: 'Job'
+        {{- include "kub-app.labels" $root | nindent 8 }}
+        app_type: "Job"
       annotations:
-        checksum/config: {{ print .Values.cronjob.containers | sha256sum }}
+        checksum/config: {{ $cj.containers | toJson | sha256sum }}
     spec:
-      {{- if .Values.cronjob.activeDeadlineSeconds }}
-      activeDeadlineSeconds: {{ .Values.cronjob.activeDeadlineSeconds }}
+      {{- if $cj.activeDeadlineSeconds }}
+      activeDeadlineSeconds: {{ $cj.activeDeadlineSeconds }}
       {{- end }}
-      ttlSecondsAfterFinished: {{ $.Values.cronjob.ttlSecondsAfterFinished | default 7200  }}
+      ttlSecondsAfterFinished: {{ $cj.ttlSecondsAfterFinished | default 7200 }}
       template:
         metadata:
           labels:
-            {{- include "kub-app.labels" $ | nindent 12 }}
+            {{- include "kub-app.labels" $root | nindent 12 }}
           annotations:
-            checksum/config: {{ print .Values.cronjob.containers  | sha256sum }}
+            checksum/config: {{ $cj.containers | toJson | sha256sum }}
         spec:
           restartPolicy: OnFailure
           containers:
-          {{- range $name, $container := .Values.cronjob.containers }}
+          {{- range $name, $container := $cj.containers }}
             - name: {{ $name }}
               image: {{ $container.image }}
+              {{- if $container.command }}
               command:
                 {{- $container.command | toYaml | nindent 16 }}
+              {{- end }}
+              {{- if $container.args }}
               args:
-                {{- printf "- %s" ($container.args | quote) | nindent 16 }}
+                - {{ $container.args | quote }}
+              {{- end }}
               env:
-                {{- include "kub-app-lib.env" $ | nindent 16 }}
-                {{- include "kub-app-lib.env.secrets" $ | nindent 16 }}
-
+                {{- include "kub-app-lib.env" $root | nindent 16 }}
+                {{- include "kub-app-lib.env.secrets" $root | nindent 16 }}
           {{- end }}
-{{- end -}}
+{{- end }}
+{{- end }}
